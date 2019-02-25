@@ -1,5 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+
+//Third Party
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -48,10 +50,6 @@ const styles = theme => ({
 //  Login Component
 class Login extends React.Component {
 
-  /* set constructor with email as ''.
-  * this can be removed and the value can be accessesd
-  * via event targetvalue directly.
-  */
   constructor(props) {
     super()
     this.state = {
@@ -66,11 +64,6 @@ class Login extends React.Component {
 
   handleEmailChange = (e) => {
     this.setState({ email: e.target.value });
-  }
-
-  // it's better if we clear this at browser/tab close or iontroduce logout :-P
-  componentWillUnmount() {
-    localStorage.clear()
   }
 
   render() {

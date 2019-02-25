@@ -15,33 +15,23 @@ import { Button } from '@material-ui/core';
  */
 class Editor extends React.Component {
     constructor(props) {
-        super(props)
-        this.state = { editorHtml: '' }
-    }
-
-    handleChange = (html) => {
-        this.setState({ editorHtml: html });
-    }
-
-    handleClear = (html) => {
-        this.setState({ editorHtml: '' });
+        super()
     }
 
     render() {
-        const { onSubmit } = this.props
-        
+        const { onSubmit, placeholder, editorHtml, handleChange, handleClear  } = this.props
         return (
             <div className="app">
                 <ReactQuill
                     theme='snow'
-                    onChange={this.handleChange}
-                    value={this.state.editorHtml}
+                    onChange={handleChange}
+                    value={ editorHtml}
                     modules={Editor.modules}
                     formats={Editor.formats}
-                    placeholder={this.props.placeholder}
+                    placeholder={placeholder}
                 />
                 <div className="editor-footer">
-                    <Button className="editor-save" variant="contained" color="primary" onClick={() => this.handleClear()}>
+                    <Button className="editor-save" variant="contained" color="primary" onClick={() => handleClear()}>
                         Clear
                     </Button>
                     <Button className="editor-clear" variant="contained" color="secondary" onClick={() => onSubmit()}>
