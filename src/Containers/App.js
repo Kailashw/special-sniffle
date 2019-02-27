@@ -14,18 +14,21 @@ class App extends Component {
 
   constructor(props) {
     super()
-    this.state = { editorHtml: '' }
+    this.state = { editorHtml: '', document: null, successMessage: false }
   }
 
 
-  componentDidMount(){
-    fetch(`${BaseURL}`+'/Documents/'+`${this.props.match.params.id}`)
-            .then(response => response.json())
-            .then(json => {
-                this.setState({
-                    editorHtml: json.editorHtml
-                })
-            })
+  componentDidMount() {
+    if (Object.keys(this.props).length) {
+      fetch(BaseURL + '/Documents/' + this.props.match.params.id)
+        .then(response => response.json())
+        .then(json => {
+          this.setState({
+            editorHtml: json.editorHtml,
+            document: json
+          })
+        })
+    }
   }
 
   handleChange = (html) => {
@@ -38,30 +41,35 @@ class App extends Component {
 
   // put operation to update the doc
   onSubmit = () => {
-      fetch( `${BaseURL}`+'/Documents/'+`${this.props.match.params.id}`, {
+    fetch(BaseURL + '/Documents/' + this.props.match.params.id, {
       headers: { "Content-Type": "application/json; charset=utf-8" },
       method: 'PUT',
       body: JSON.stringify({
         "updatedAt": new Date().toISOString(),
-        "isLocked":false,
+        "isLocked": false,
         "updatedBy": localStorage.getItem('email'),
-        "editorHtml":this.state.editorHtml
+        "editorHtml": this.state.editorHtml
       })
-    })
+    }).then(
+      resp => resp.status >=200 && resp.status < 299 ? this.setState({successMessage:true}) : this.setState({successMessage:false})
+    )
   }
 
   render() {
     return (
       <div>
         <Header />
-        <RenderHeader />
+        {this.state.successMessage &&
+          alert("Document updated Successfully.")
+        }
         <div>
-          <Editor 
-            placeholder={'Go ahead and write something...'} 
-            editorHtml ={this.state.editorHtml} 
-            handleChange={this.handleChange} 
-            handleClear ={this.handleClear}
-            onSubmit={this.onSubmit}/>
+          <h1 style={h1Style}> {this.state.document && this.state.document.title} </h1>
+          <Editor
+            placeholder={'Go ahead and write something...'}
+            editorHtml={this.state.editorHtml}
+            handleChange={this.handleChange}
+            handleClear={this.handleClear}
+            onSubmit={this.onSubmit} />
         </div>
         <Footer />
       </div>
@@ -69,13 +77,9 @@ class App extends Component {
   }
 }
 
-// @TODO : please move this to center
-const RenderHeader = () => {
-  return (
-    <div>
-      <h2> Hi {localStorage.getItem('email')}, Hope you're having a good day.</h2>
-    </div>
-  )
+const h1Style = {
+  display: "flex",
+  justifyContent: "center"
 }
 
 export default App;

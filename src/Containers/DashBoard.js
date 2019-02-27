@@ -89,7 +89,7 @@ const DocumentList = (documents, fn) => {
             {documents.map((list) => {
                 return (
                     <List key={list.id} subheader={
-                            <ListSubheader> <Button onClick={() => fn(list.id)} > {list.name} </Button></ListSubheader>
+                            <ListSubheader> <Button onClick={() => fn(list.id)} > {list.title} </Button></ListSubheader>
                             }>
                     </List>
                 )

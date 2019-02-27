@@ -10,7 +10,7 @@ class Logout extends React.Component{
     render(){
         // clear localstorage.
         localStorage.clear()
-        this.props.history.push('/')
+        this.props.history.push('/login')
         return <App />
     }
 }
